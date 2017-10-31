@@ -18,5 +18,37 @@
 *.tar.gz
 *.rar
 
+
+*.class
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# ide settings #
+org.eclipse.core.resources.prefs
+org.eclipse.jdt.core.prefs
+org.eclipse.m2e.core.prefs
+org.eclipse.wst.common.component
+org.eclipse.wst.common.project.facet.core.xml
+org.eclipse.wst.jsdt.ui.superType.container
+org.eclipse.wst.jsdt.ui.superType.name
+org.eclipse.wst.validation.prefs
+.classpath
+.settings/
+.project
+#svn settings
+.svn/
+/webapp/WEB-INF/target/
+/webapp/WEB-INF/classes/
+
+.idea/
+*.iml
+/target/
+jfinal_weixin.log
+bin/
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

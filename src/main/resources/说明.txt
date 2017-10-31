@@ -1,0 +1,9 @@
+此版本只兼容jfinal3.1版本,若使用jfinal2.x版本请使用原jfinal-ext2版本
+原jfinal-ext2的maven
+<dependency>
+	<groupId>com.jfinal</groupId>
+	<artifactId>jfinal-ext2</artifactId>
+	<version>2.0.7</version>
+</dependency>
+
+by 刘泽霖
