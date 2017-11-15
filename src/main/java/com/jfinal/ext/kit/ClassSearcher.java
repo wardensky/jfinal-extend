@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.log4j.chainsaw.Main;
+
 import com.google.common.collect.Lists;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.StrKit;
@@ -29,7 +31,7 @@ import com.jfinal.log.Log;
 
 public class ClassSearcher {
 
-	protected static final Log LOG = Log.getLog(ClassSearcher.class);
+	protected static final Log logger = Log.getLog(ClassSearcher.class);
 
 	private String classpath = PathKit.getRootClassPath();
 
@@ -84,7 +86,7 @@ public class ClassSearcher {
 		List<String> classFiles = Lists.newArrayList();
 		File baseDir = new File(baseDirName);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
-			LOG.error("search error：" + baseDirName + "is not a dir！");
+			logger.error("search error：" + baseDirName + "is not a dir！");
 		} else {
 			String[] files = baseDir.list();
 			for (int i = 0; i < files.length; i++) {
@@ -201,19 +203,28 @@ public class ClassSearcher {
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
 			File f = new File(System.getProperty("user.dir"));
 			this.libDir = f.getParent() + File.separator + "lib";
-			LOG.info("new dir = " + this.libDir);
+			logger.info("new dir = " + this.libDir);
 		}
+	}
+
+	public static void main(String[] args) {
+		String entryName = "org/hhtd_constants/BusiConst.class";
+	 
+		String separator =entryName.contains("/") ? "/":"\\";
+		 
+		String className = entryName.replaceAll( separator, ".").substring(0, entryName.length() - 6);
+		System.out.println(className);
 	}
 
 	/**
 	 * 查找jar包中的class
 	 */
 	private List<String> findjarFiles(String baseDirName) {
-
+		System.out.println("execute findjarFiles");
 		List<String> classFiles = Lists.newArrayList();
 		File baseDir = new File(baseDirName);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
-			LOG.error("file search error:" + baseDirName + " is not a dir！");
+			logger.error("file search error:" + baseDirName + " is not a dir！");
 		} else {
 			File[] files = baseDir.listFiles();
 			for (File file : files) {
@@ -227,7 +238,7 @@ public class ClassSearcher {
 						if (!file.getName().contains(this.jarFilter)) {
 							continue;
 						}
-						LOG.info(file.getName());
+						logger.info(file.getName());
 						JarFile localJarFile = null;
 						try {
 							localJarFile = new JarFile(new File(baseDirName + File.separator + file.getName()));
@@ -237,16 +248,21 @@ public class ClassSearcher {
 								String entryName = jarEntry.getName();
 								if (scanPackages.isEmpty()) {
 									if (!jarEntry.isDirectory() && entryName.endsWith(".class")) {
-										String className = entryName.replaceAll(File.separator, ".").substring(0,
+									 
+										// org/hhtd_constants/BusiConst.class
+										String className = entryName.replaceAll(entryName.contains("/") ? "/":"\\", ".").substring(0,
 												entryName.length() - 6);
 										classFiles.add(className);
+										logger.info("className" + className);
 									}
 								} else {
 									for (String scanPackage : scanPackages) {
+										System.out.println("scanPackage = " + scanPackage);
+										logger.info("scanPackage = " + scanPackage);
 										scanPackage = scanPackage.replaceAll("\\.", "\\" + File.separator);
 										if (!jarEntry.isDirectory() && entryName.endsWith(".class")
 												&& entryName.startsWith(scanPackage)) {
-											String className = entryName.replaceAll(File.separator, ".").substring(0,
+											String className = entryName.replaceAll(entryName.contains("/") ? "/":"\\", ".").substring(0,
 													entryName.length() - 6);
 											classFiles.add(className);
 										}
